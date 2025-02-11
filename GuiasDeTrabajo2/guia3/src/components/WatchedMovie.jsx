@@ -2,7 +2,7 @@ export function WatchedMoviesContainer({ children }) {
     return <>{children}</>;
 }
 
-export function WatchedMoviesList({ watched, onDeleteMovie }) { //COMPPPP
+export function WatchedMoviesList({ watched, onDeleteMovie }) { //Complementario  1
     return (
         <ul className="list">
             {watched.map((movie) => (
@@ -12,7 +12,7 @@ export function WatchedMoviesList({ watched, onDeleteMovie }) { //COMPPPP
     );
 }
 
-export function WatchedMovie({ movie, onDeleteMovie }) {
+export function WatchedMovie({ movie, onDeleteMovie }) { //Complementario 1
     return (
         <li>
             <img src={movie.poster} alt={`${movie.title} poster`} />
@@ -30,7 +30,7 @@ export function WatchedMovie({ movie, onDeleteMovie }) {
                     <span>⏳</span>
                     <span>{movie.runtime} min</span>
                 </p>
-                <button className="btn-delete" onClick={() => onDeleteMovie(movie.imdbID)}>X</button>
+                <button className="btn-delete" onClick={() => onDeleteMovie(movie.imdbID)}>X</button> 
             </div>
         </li>
     );
