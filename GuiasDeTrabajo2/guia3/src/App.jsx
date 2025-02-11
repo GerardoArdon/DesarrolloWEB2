@@ -49,7 +49,7 @@ export default function App() {
     setWatched((watched) => [...watched, movie]);
   }
 
-  function handleDeleteWatched(id) { //COMPPPPP
+  function handleDeleteWatched(id) { //Conplementario 1
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
 
