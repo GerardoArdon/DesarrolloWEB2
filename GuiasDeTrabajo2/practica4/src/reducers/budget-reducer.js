@@ -43,7 +43,7 @@ export const budgetReducer = (state, action)=>{
             return {
                 ...state,
                 editingId: action.payload.id, 
-                modal: true, // Abre el modal automáticamente
+                modal: true,
             }
             case "update-expense":
                 return {
@@ -56,6 +56,17 @@ export const budgetReducer = (state, action)=>{
                 }
             case "add-filter-category":
                 return{...state, currentCategory:action.payload.categoryId}
+            case "reset-app":
+                localStorage.removeItem("budget")
+                localStorage.removeItem("expenses")
+                return {
+                    ...state,
+                    budget: 0,
+                    expenses: [],
+                    editingId: "",
+                    currentCategory: ""
+            }
+
         default:
             return state;
     }

@@ -23,19 +23,19 @@ export const ExpenseForm = () => {
         if (state.editingId) {
           const editingExpense = state.expenses.find(
             currentExpense => currentExpense.id === state.editingId
-          );
+          )
           setExpense(editingExpense || {
             expenseName: "",
             amount: 0,
             category: "",
             date: new Date(),
-          });
+          })
         }
-      }, [state.editingId]);
+      }, [state.editingId])
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        const isAmountField = ["amount"].includes(name); // ["amount"] es un array con un solo valor, y .includes(name) devuelve true si name es "amount".
+        const { name, value } = e.target
+        const isAmountField = name === "amount"; // ["amount"] es un array con un solo valor, y .includes(name) devuelve true si name es "amount".
         setExpense({
         ...expense,
         // [name] es una clave calculada que representa el nombre del campo que se está actualizando.
@@ -55,26 +55,41 @@ export const ExpenseForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validación
-    if (Object.values(expense).includes('')) {
-      setError('Todos los Campos son Obligatorios')
-      return;
-    }
-    
-    if (state.editingId) {
-        dispatch({ type: 'update-expense', payload: { expense: { id: state.editingId, ...expense } } })
-    }
-    else{
-        dispatch({ type: 'add-expense', payload: { expense } })
+    if (Object.values(expense).includes('') || expense.amount <= 0) {
+        setError('Todos los Campos son Obligatorios y el monto debe ser mayor a 0.');
+        return;
     }
 
-    // Reiniciar el state/form
+    const totalExpenses = state.expenses.reduce((total, exp) => total + exp.amount, 0);
+    const remainingBudget = state.budget - totalExpenses;
+
+    if (state.editingId) {
+        const previousExpense = state.expenses.find(exp => exp.id === state.editingId);
+        const adjustedRemainingBudget = remainingBudget + (previousExpense ? previousExpense.amount : 0);
+
+        if (expense.amount > adjustedRemainingBudget) {
+            setError('El gasto excede el presupuesto disponible.');
+            return;
+        }
+        
+        dispatch({ type: 'update-expense', payload: { expense: { id: state.editingId, ...expense } } });
+    } else {
+        if (expense.amount > remainingBudget) {
+            setError('El gasto excede el presupuesto disponible.');
+            return;
+        }
+
+        dispatch({ type: 'add-expense', payload: { expense } });
+    }
+
     setExpense({
-      expenseName: "",
-      amount: 0,
-      category: "",
-      date: new Date(),
+        expenseName: "",
+        amount: 0,
+        category: "",
+        date: new Date(),
     })
+
+    setError('')
     }
 
   return (
@@ -146,5 +161,5 @@ export const ExpenseForm = () => {
         value={state.editingId ? "Guardar Cambios" : "Registrar Gasto"}
       />
     </form>
-  );
-};
+  )
+}

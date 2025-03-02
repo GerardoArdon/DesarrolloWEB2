@@ -14,7 +14,6 @@ export const ExpenseDetails = ({ expense }) => {
 
     const dispatch = useContext(BudgetDispatchContext)
 
-    // Define la acción que se muestra al deslizar hacia la izquierda
     const leadingAction = () => (
         <LeadingActions>
             <SwipeAction onClick={() => dispatch({ type: "get-expense-by-id", payload: { id: expense.id } })}>
@@ -23,7 +22,6 @@ export const ExpenseDetails = ({ expense }) => {
         </LeadingActions>
     );
 
-    // Define la acción que se muestra al deslizar hacia la derecha
     const trailingAction = () => (
         <TrailingActions>
             <SwipeAction destructive={true} onClick={() => dispatch({ type: "remove-expense", payload: { id: expense.id } })}>
@@ -32,7 +30,7 @@ export const ExpenseDetails = ({ expense }) => {
         </TrailingActions>
     );
 
-    const categoryInfo = categories.find(cat => cat.id === expense.category) //recuperando el nombre de la categoria
+    const categoryInfo = categories.find(cat => cat.id === expense.category)
     return (
         <SwipeableList>
             <SwipeableListItem maxSwipe={1} leadingActions={leadingAction()} trailingActions={trailingAction()}>

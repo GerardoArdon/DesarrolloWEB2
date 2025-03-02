@@ -1,31 +1,33 @@
 import { AmountDisplay } from "./AmountDisplay"
-import { BudgetStateContext } from "../context/BudgetContext";
-import { useContext } from "react";
-import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
+import { BudgetStateContext, BudgetDispatchContext } from "../context/BudgetContext"
+import { useContext } from "react"
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
+import 'react-circular-progressbar/dist/styles.css'
 
 export const BudgetTracker = () => {
-    const state = useContext(BudgetStateContext);
+    const state = useContext(BudgetStateContext)
     const totalExpenses = state.expenses.reduce((total, expense) => expense.amount + total, 0)
-    const remainingBudget = state.budget - totalExpenses;
+    const remainingBudget = state.budget - totalExpenses
     const percentage = ((totalExpenses/state.budget)*100).toFixed(2)
+    const dispatch = useContext(BudgetDispatchContext)
 
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <div className="flex justify-center">
         <CircularProgressbar
-                    value={percentage} // Valor del progreso (0 - 100)
-                    text={`${percentage}%`} // Texto que se muestra dentro del circulo, en este caso el porcentaje
+                    value={percentage}
+                    text={`${percentage}%`} 
                     styles={buildStyles({
-                        pathColor: (percentage < 100) ? '#3b82f6' : '#dc2626', // Azul si es <100%, Rojo si es 100%
-                        trailColor: '#F5F5F5', // Color del fondo de la barra
+                        pathColor: (percentage < 100) ? '#3b82f6' : '#dc2626',
+                        trailColor: '#F5F5F5',
                     })}
                 />
         </div>
       <div className="flex flex-col justify-center items-center gap-8">
         <button 
             className="bg-pink-600 w-full p-2 text-white uppercase font-bold rounded-lg"
+            onClick={() => dispatch({ type: "reset-app" })}
         >
           Resetear app
         </button>
@@ -37,4 +39,4 @@ export const BudgetTracker = () => {
 
     </div>
   )
-};
+}
