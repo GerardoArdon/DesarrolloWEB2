@@ -1,0 +1,33 @@
+import { getCategories, getRecipeById, getRecipes } from "../services/RecipeService";
+
+export const createRecipesSlice = (set) => ({
+  categories: [],
+  drinks: [],
+  selectedRecipe: null,
+  modal: false,
+
+  fetchCategories: async () => {
+    const categories = await getCategories();
+    set({ categories });
+  },
+
+  searchRecipes: async (filters) => {
+    const data = await getRecipes(filters);
+    set({ drinks: data.drinks || [] });
+  },
+
+  selectRecipe: async (id) => {
+    const selectedRecipe = await getRecipeById(id);
+    set({
+      selectedRecipe,
+      modal: true
+    });
+  },
+
+  closeModal: () => {
+    set({
+      modal: false,
+      selectedRecipe: null
+    });
+  }
+});
